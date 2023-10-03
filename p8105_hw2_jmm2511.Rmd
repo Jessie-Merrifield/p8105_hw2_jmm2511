@@ -14,7 +14,8 @@ library(tidyverse)
 
 Using datasets: pols-month.csv, unemployment.csv, and snp.csv.
 
-*Goal* merge these into a single data frame using year and month as keys across datasets.
+*Goal*: 
+merge these into a single data frame using year and month as keys across datasets.
 
 ```{r read in, message=FALSE}
 pols_month <- read_csv(file ="C:/Users/jmoon/OneDrive/Desktop/fivethirtyeight_datasets/pols-month.csv")
