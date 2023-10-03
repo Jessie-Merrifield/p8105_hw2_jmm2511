@@ -1,0 +1,26 @@
+---
+title: "p8105_hw2_jmm2511"
+author: "Jessie Merrifield"
+date: "2023-10-03"
+output: github_document
+---
+
+```{r setup, message=FALSE}
+library(tidyverse)
+
+```
+
+## Question 1
+
+```{r}
+
+```
+
+
+## Question 2
+
+
+```{r}
+
+```
+
