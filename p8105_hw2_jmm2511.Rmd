@@ -41,17 +41,10 @@ clean the data in snp.csv using a similar process to the above. For consistency 
 ```{r clean snp}
 
 snp <- read_csv(file ="C:/Users/jmoon/OneDrive/Desktop/fivethirtyeight_datasets/snp.csv")|>
-  separate(date, into=c("month", "day", "year")) |>
-  relocate(year, .before=month)
-
-snp = 
-  read_csv(
-    "./data/fivethirtyeight_datasets/snp.csv",
-    col_types = cols(date = col_date(format = "%m/%d/%y"))) |>
-  separate(date, into = c("year", "month_num", "day"), convert = TRUE) |>
+  separate(date, into=c("month", "day", "year"), convert = TRUE) |>
+  relocate(year, .before=month)|>
   mutate(
-    year = if_else(year > 2023, year - 100, year)) |> 
-  left_join(x = _, y = month_df) |> 
+    year = if_else(year > 2023, year - 100, year))|> 
   select(year, month, close) 
 
 ```
@@ -104,7 +97,12 @@ str(data_538)
 
 Notice that there are some `NA` values in the `close` and `unemployment` variables, which indicate that the value of these variables is missing at those locations.
 
+
+
 Let's talk about the 538 datasets. The `pols` data has `r nrow(pols)` observations and `r ncol(pols)` variables and tells us about the party affiliation distribution (democrat or republican) for governors and senators for a given year from years `r pols |> pull(year) |> min()` to `r pols |> pull(year) |> max()`. It also tells us whether the sitting president was a democrat or republican. The `snp` data has `r nrow(snp)` observations and `r ncol(snp)` variables, ranging from years `r snp |> pull(year) |> min()` to `r snp |> pull(year) |> max()`. The `unemployment` data has `r nrow(unemployment)` observations and `r ncol(unemployment)` variables ranging from years `r unemployment |> pull(year) |> min()` to `r unemployment |> pull(year) |> max()`. In Januarys in or after 1975 in which a democrat was president, the **average unemployment rate was `r filter(data_538, month == "January", year >= 1975, president == "dem") |> pull(unemployment) |> mean() |> round(2)`**.  The average unemployment rate over the same time period in which a republican was president was `r filter(data_538, month == "January", year >= 1975, president == "gop") |> pull(unemployment) |> mean() |> round(2)`.
+
+
+
 
 
 ## Question 2
@@ -123,7 +121,9 @@ mr_trashwheel<-
              sheet="Mr. Trash Wheel",
              range = "A2:N586") %>% 
   janitor::clean_names() %>% 
-  mutate(homes_powered=(weight_tons*(500/30)))
+  mutate(homes_powered=(weight_tons*(500/30))) %>%
+  mutate(source="mr") %>% 
+  mutate(year=as.numeric(year))
 
 
 
@@ -138,7 +138,9 @@ prof_trashwheel<-
              sheet="Professor Trash Wheel",
              range = "A2:M108") %>% 
   janitor::clean_names() %>% 
-  mutate(homes_powered=(weight_tons*(500/30)))
+  mutate(homes_powered=(weight_tons*(500/30)))%>% 
+  mutate(source="prof")
+
 ```
 
 
@@ -150,14 +152,21 @@ g_trashwheel<-
              sheet="Gwynnda Trash Wheel",
              range = "A2:L157") %>% 
   janitor::clean_names() %>% 
-  mutate(homes_powered=(weight_tons*(500/30)))
+  mutate(homes_powered=(weight_tons*(500/30)))%>% 
+  mutate(source="gwynnda")
+
 ```
 
 
 combine these with the Mr. Trash Wheel dataset to produce a single tidy dataset. To keep track of which Trash Wheel is which, you may need to add an additional variable to all datasets before combining.
 
 ```{r}
-
+trashwheel_tidy = 
+  bind_rows(mr_trashwheel, prof_trashwheel, g_trashwheel) %>% 
+  relocate(source) %>% 
+  separate(date, into=c("year1", "month1", "day"), convert = TRUE) %>% 
+  select(-year1,-month1) %>% 
+  relocate(day, .before=year)
 ```
 
 
