@@ -32,6 +32,13 @@ snp <- read_csv(file ="C:/Users/jmoon/OneDrive/Desktop/fivethirtyeight_datasets/
 
 ```{r clean pols_month}
 
+pols_month <- read_csv(file ="C:/Users/jmoon/OneDrive/Desktop/fivethirtyeight_datasets/pols-month.csv") |>
+  separate(mon, into=c("year", "month", "day")) |>
+  mutate("month"=month.name[month])
+
+?separate
+?month.name
+
 ```
 
 2. Clean dataset snp
@@ -39,7 +46,10 @@ snp <- read_csv(file ="C:/Users/jmoon/OneDrive/Desktop/fivethirtyeight_datasets/
 clean the data in snp.csv using a similar process to the above. For consistency across datasets, arrange according to year and month, and organize so that year and month are the leading columns
 
 ```{r clean snp}
-
+snp <- read_csv
+(file ="C:/Users/jmoon/OneDrive/Desktop/fivethirtyeight_datasets/snp.csv")|>
+  separate(mon, into=c("year", "month", "day")) |>
+  mutate("month"=month.name[month])
 ```
 
 
