@@ -243,11 +243,14 @@ print(class(baseline$apoe4))
 import, clean, and tidy the dataset of longitudinally observed biomarker values; 
 
 *comment on the steps on the import process and the features of the dataset.*
+This dataset is formatted wide, but I do not wish to change it to longer as that would 
+affect the join options with the baseline dataset.
 
 ```{r}
 biomarkers<-read.csv("C:/Users/jmoon/OneDrive/Desktop/data_mci/mci_amyloid.csv",
                      skip=1) %>% 
-  janitor::clean_names()
+  janitor::clean_names() %>% 
+  rename(id=study_id)
 
 ```
 
@@ -255,10 +258,11 @@ biomarkers<-read.csv("C:/Users/jmoon/OneDrive/Desktop/data_mci/mci_amyloid.csv",
 *Check whether some participants appear in only the baseline or amyloid datasets, and comment on your findings.*
 
 
-
 Combine the demographic and biomarker datasets so that only participants who appear in both datasets are retained
 
 ```{r}
+base_bio = 
+  left_join(baseline, biomarkers, by = "id")
 
 ```
 
