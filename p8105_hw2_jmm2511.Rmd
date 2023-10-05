@@ -24,6 +24,7 @@ merge these into a single data frame using year and month as keys across dataset
 
 ```{r clean pols_month}
 
+#alternate attempt
 #pols_month <- read_csv(file #="C:/Users/jmoon/OneDrive/Desktop/fivethirtyeight_datasets/pols-month.csv") %>% 
  # separate(mon, into=c("year", "month", "day"), convert = TRUE) %>% 
   #mutate(month = month.name[as.numeric(month)])%>% 
@@ -55,6 +56,7 @@ clean the data in snp.csv using a similar process to the above. For consistency 
 
 ```{r clean snp}
 
+#alternate attempt
 #snp <- read_csv(file ="C:/Users/jmoon/OneDrive/Desktop/fivethirtyeight_datasets/snp.csv")|>
  # separate(date, into=c("month", "day", "year"), convert = TRUE) |>
   #relocate(year, .before=month)|>
@@ -104,14 +106,23 @@ unemployment =
 Finally, merge the datasets
 
 
+```{r}
+data_538 = 
+  left_join(pols_month, snp) |>
+  left_join(x = _, y = unemployment)
 
+str(data_538)
+```
 
-- Explain briefly what each dataset contained
+The dataset pols_month contains 822 observations of 9 variables. It describes the number of politicians who are democratic or republican at that time. 
 
-- describe the resulting dataset (e.g. give the dimension, range of years, and names of key variables).
+The snp dataset contains 787 observations of 2 variables and describes the  Standard & Poor’s stock market index using the variable "close."
 
-Notice that there are some `NA` values in the `close` and `unemployment` variables, which indicate that the value of these variables is missing at those locations.
+The dataset unemployment contains 68 observations of 13 variables and describes the yearly and
+monthly unemployment percentage. 
 
+There are 822 observations of 13 variables in the final dataset. The years ranges from 1947 to 
+2015.
 
 
 
